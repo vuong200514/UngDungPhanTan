@@ -24,10 +24,6 @@ TEST_DB_LOCK_PATH = '{}.lock'.format(TEST_DB_PATH)
 
 
 class PupDBWriterThread(Thread):
-    """
-        This class represents an instance of a thread that writes
-        to the database.
-    """
 
     def __init__(self, data_range, database=None):
         """ Instance Initialization """

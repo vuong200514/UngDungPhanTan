@@ -3,22 +3,19 @@
 """
 
 from os import path
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open(path.join(path.abspath(path.dirname(__file__)), 'README.md')) as f:
     LONG_DESCRIPTION = f.read()
 
 setup(
     name='pupdb',
-    packages=['pupdb'],
-    version='0.1.4',
+    packages=find_packages(),
+    version='0.1.55',  # Sửa lại phiên bản thành định dạng hợp lệ
     license='MIT',
     description='A simple file-based key-value database written in Python.',
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
-    download_url=(
-        'https://github.com/tuxmonk/pupdb/archive/master.zip'
-    ),
     url='https://github.com/tuxmonk/pupdb',
     author='tuxmonk',
     author_email='30048080+tuxmonk@users.noreply.github.com',
@@ -42,6 +39,9 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
     ],
     include_package_data=True
 )
