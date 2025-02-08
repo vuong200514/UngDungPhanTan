@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <img src="https://raw.githubusercontent.com/tuxmonk/pupdb/master/logo.png" alt="PupDB Logo" width="400"/>
 
 [![Build Status](https://travis-ci.org/tuxmonk/pupdb.svg?branch=master)](https://travis-ci.org/tuxmonk/pupdb) [![codecov](https://codecov.io/gh/tuxmonk/pupdb/branch/master/graph/badge.svg)](https://codecov.io/gh/tuxmonk/pupdb) [![PyPI version fury.io](https://badge.fury.io/py/pupdb.svg)](https://pypi.python.org/pypi/pupdb/) [![Supported Python Versions](https://img.shields.io/pypi/pyversions/pupdb.svg)](https://pypi.python.org/pypi/pupdb/)
@@ -188,3 +189,6 @@ see the
 
 This project is licensed under the MIT License - see the
 [LICENSE.txt](https://github.com/tuxmonk/pupdb/blob/master/LICENSE.txt) file for more details.
+=======
+# UngDungPhanTan
+>>>>>>> 7c722d0abd6617ab8678bb17ee91296bb7b2558f
