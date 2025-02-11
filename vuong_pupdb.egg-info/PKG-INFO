@@ -1,7 +1,7 @@
 Metadata-Version: 2.2
-Name: pupdb
-Version: 0.1.55
-Summary: A simple file-based key-value database written in Python.
+Name: vuong_pupdb
+Version: 2.0
+Summary: A simple file-based key-value database written in Python. Edited by Vuongpro
 Home-page: https://github.com/tuxmonk/pupdb
 Author: tuxmonk
 Author-email: 30048080+tuxmonk@users.noreply.github.com

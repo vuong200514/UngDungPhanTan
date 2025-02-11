@@ -190,5 +190,3 @@ see the
 This project is licensed under the MIT License - see the
 [LICENSE.txt](https://github.com/tuxmonk/pupdb/blob/master/LICENSE.txt) file for more details.
 =======
-# UngDungPhanTan
->>>>>>> 7c722d0abd6617ab8678bb17ee91296bb7b2558f

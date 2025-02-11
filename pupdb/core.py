@@ -99,39 +99,45 @@ class PupDB(object):
         return True
 
 class ChordNode:
-    def __init__(self, id, m, db_file_path):
+    def __init__(self, id, m, db_file_path, nodes):
         self.id = id
         self.m = m
         self.db = PupDB(db_file_path)
         self.finger_table = []
-        self.successor = None
+        self.succ = None
+        self.nodes = nodes
+        nodes.append(self)
+        self.tinhFingerTable(nodes)
+        self.setSucc(nodes[(nodes.index(self) + 1) % len(nodes)])
 
-    def calculate_finger_table(self, nodes):
+    def tinhFingerTable(self, nodes):
         for i in range(1, self.m + 1):
             p = (self.id + 2**(i - 1)) % (2**self.m)
-            successor = self.find_successor(p, nodes)
+            successor = self.timSucc(p, nodes)
             self.finger_table.append(successor)
 
-    def find_successor(self, id, nodes):
+    def timSucc(self, id, nodes):
         for node in sorted(nodes, key=lambda x: x.id):
             if node.id >= id:
                 return node
         return nodes[0]
 
-    def set_successor(self, successor):
-        self.successor = successor
+    def setSucc(self, succ):
+        self.succ = succ
 
-    def resolve(self, key):
+    def timNode(self, key):
         key = int(key)
-        if self.id <= key < self.successor.id or (self.id > self.successor.id and (key >= self.id or key < self.successor.id)):
-            return self.successor
+        if self.succ is None:
+            raise AttributeError("Không tìm thấy succ cho node {}".format(self.id))
+        if self.id <= key < self.succ.id or (self.id > self.succ.id and (key >= self.id or key < self.succ.id)):
+            return self.succ
         else:
             for finger in reversed(self.finger_table):
                 if finger.id > self.id and finger.id <= key:
-                    return finger.resolve(key)
-            return self.successor.resolve(key)
+                    return finger.timNode(key)
+            return self.succ.timNode(key)
 
-    def display_finger_table(self):
+    def fingerTable(self):
         print(f"Node {self.id} Finger Table:")
         print("i   |   Node ID")
         for i, node in enumerate(self.finger_table):
@@ -139,42 +145,65 @@ class ChordNode:
         print()
 
     def set(self, key, value):
-        NODE = self.resolve(key)
+        NODE = self.timNode(key)
         NODE.db.set(key, value)
 
     def get(self, key):
-        NODE = self.resolve(key)
+        NODE = self.timNode(key)
         return NODE.db.get(key)
 
     def remove(self, key):
-        NODE = self.resolve(key)
+        NODE = self.timNode(key)
         return NODE.db.remove(key)
 
     def keys(self):
-        all_keys = []
-        for node in self.finger_table:
-            all_keys.extend(node.db.keys())
-        return all_keys
+        all = []
+        for node in self.nodes:
+            all.extend(node.db.keys())
+        return all
 
     def values(self):
-        all_values = []
-        for node in self.finger_table:
-            all_values.extend(node.db.values())
-        return all_values
+        all = []
+        for node in self.nodes:
+            all.extend(node.db.values())
+        return all
 
     def items(self):
-        all_items = []
-        for node in self.finger_table:
-            all_items.extend(node.db.items())
-        return all_items
+        all = []
+        for node in self.nodes:
+            all.extend(node.db.items())
+        return all
 
     def dumps(self):
-        all_data = {}
-        for node in self.finger_table:
-            all_data.update(node.db._get_database())
-        return json.dumps(all_data, sort_keys=True)
+        all = {}
+        for node in self.nodes:
+            all.update(node.db._get_database())
+        return json.dumps(all, sort_keys=True)
 
     def truncate_db(self):
-        for node in self.finger_table:
+        for node in self.nodes:
             node.db.truncate_db()
         return True
+    
+    def getNodes(self):
+        return [node.id for node in self.nodes]
+
+    def join(self, leader):
+        leader.themNut(self)
+
+class Leader:
+    def __init__(self, nodes):
+        self.nodes = nodes
+        self.leader = None
+
+    def chonLeader(self):
+        self.leader = max(self.nodes, key=lambda node: node.id)
+
+    def layLeader(self):
+        return self.leader
+
+    def themNut(self, node):
+        for n in self.nodes:
+            n.tinhFingerTable(self.nodes)
+        for i, n in enumerate(self.nodes):
+            n.setSucc(self.nodes[(i + 1) % len(self.nodes)])
