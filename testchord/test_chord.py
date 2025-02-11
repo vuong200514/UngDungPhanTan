@@ -3,55 +3,59 @@ from pupdb.core import ChordNode
 def test_chord():
     m = 7  # Số bit trong ID của nút
     node_ids = [0, 25, 50, 75]
-    nodes = [ChordNode(id, m, f'db_{id}.json') for id in node_ids]
+    nodes = []
 
+    #Khởi tạo chord
+    for id in node_ids:
+        node = ChordNode(id, m, f'db_{id}.json', nodes)
+        nodes.append(node)
+
+    # Thiết lập các nút kế tiếp cho mỗi nút
     for i, node in enumerate(nodes):
-        node.set_successor(nodes[(i + 1) % len(nodes)])
+        node.setSucc(nodes[(i + 1) % len(nodes)])
 
+    # Tính bảng finger cho mỗi nút
     for node in nodes:
-        node.calculate_finger_table(nodes)
+        node.tinhFingerTable(nodes)
 
-    for node in nodes:
-        node.display_finger_table()
+    # # In bảng finger cho mỗi nút
+    # for node in nodes:
+    #     node.fingerTable()
 
     # Thêm dữ liệu vào hệ thống Chord
-    start_node = nodes[0]
-    for i in range(1, 101):
-        start_node.set(i, f'value{i}')
-    start_node.set(101, 'Vuongpro')
+    head = nodes[0]
+    for i in range(1, 31):
+        j=i*3
+        head.set(j, f'value{j}')
 
-    # # Lấy dữ liệu từ hệ thống Chord và kiểm tra
-    # for i in range(1, 101):
-    #     value = start_node.get(i)
-    #     print(f'Key {i}:', value)
+    # Lấy dữ liệu từ hệ thống Chord và kiểm tra
+    print(f'Key {21}:', head.get(21))
 
     # # Kiểm tra các khóa trong hệ thống Chord
-    # keys = start_node.keys()
+    # keys = head.keys()
     # print('Keys:', keys)
 
     # # Kiểm tra các giá trị trong hệ thống Chord
-    # values = start_node.values()
+    # values = head.values()
     # print('Values:', values)
 
     # # Kiểm tra các cặp khóa-giá trị trong hệ thống Chord
-    # items = start_node.items()
+    # items = head.items()
     # print('Items:', items)
 
     # # Kiểm tra dump của cơ sở dữ liệu
-    # db_dump = start_node.dumps()
+    # db_dump = head.dumps()
     # print('Database dump:', db_dump)
 
     # # Xóa toàn bộ cơ sở dữ liệu
-    # start_node.truncate_db()
-    # print('Keys after truncate:', start_node.keys())
+    # head.truncate_db()
+    # print('Keys after truncate:', head.keys())
 
     # Tìm và in ra ID của nút chịu trách nhiệm quản lý một khóa cụ thể
-    key_to_find = 42
-    NODE = start_node.resolve(key_to_find)
+    key_to_find = 15
+    NODE = head.timNode(key_to_find)
     print(f"Key {key_to_find} được quản lí bởi {NODE.id}.")
-    print(f"{NODE.m}")
-    print(f"Giá trị của khóa {key_to_find} là {start_node.get(key_to_find)}.")
-    print(f"Giá trị của khóa 101 là {start_node.get(101)}.")
+    print(f"Giá trị của khóa {key_to_find} là {head.get(key_to_find)}.")
 
 if __name__ == '__main__':
     test_chord()
