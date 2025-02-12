@@ -33,7 +33,7 @@ for i in range(20):
     }
     db.set(sdt[i], thongTin)
 
-# Hàm tìm kiếm thông tin
+# Hàm tìm kiếm
 def timKiem(sdt):
     contact = db.get(sdt)
     if contact:

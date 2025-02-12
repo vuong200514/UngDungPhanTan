@@ -127,8 +127,6 @@ class ChordNode:
 
     def timNode(self, key):
         key = int(key)
-        if self.succ is None:
-            raise AttributeError("Không tìm thấy succ cho node {}".format(self.id))
         if self.id <= key < self.succ.id or (self.id > self.succ.id and (key >= self.id or key < self.succ.id)):
             return self.succ
         else:
@@ -145,7 +143,8 @@ class ChordNode:
         print()
 
     def set(self, key, value):
-        NODE = self.timNode(key)
+        key1 = ((int)(key) % 100)
+        NODE = self.timNode(key1)
         NODE.db.set(key, value)
 
     def get(self, key):

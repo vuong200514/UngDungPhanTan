@@ -1,11 +1,21 @@
 from pupdb.core import ChordNode
+import threading
+
+def add_data(node, start, end):
+    for i in range(start, end):
+        j = i
+        node.set(j, f'value{j}')
+
+def read_data(node, keys):
+    for key in keys:
+        print(f'Key {key}:', node.get(key))
 
 def test_chord():
     m = 7  # Số bit trong ID của nút
     node_ids = [25, 50, 75, 100]
     nodes = []
 
-    #Khởi tạo chord
+    # Khởi tạo chord
     for id in node_ids:
         node = ChordNode(id, m, f'db_{id}.json', nodes)
         nodes.append(node)
@@ -14,22 +24,31 @@ def test_chord():
     for i, node in enumerate(nodes):
         node.setSucc(nodes[(i + 1) % len(nodes)])
 
-    # # Tính bảng finger cho mỗi nút
-    # for node in nodes:
-    #     node.tinhFingerTable(nodes)
-
-    # In bảng finger cho mỗi nút
+    # Tính bảng finger cho mỗi nút
     for node in nodes:
-        node.fingerTable()
+        node.tinhFingerTable(nodes)
 
-    # Thêm dữ liệu vào hệ thống Chord
+    # Thêm dữ liệu thread
     head = nodes[0]
-    for i in range(1, 50000):
-        j=i
-        head.set(j, f'value{j}')
+    write_threads = []
+    for i in range(1, 10000, 1000):
+        t = threading.Thread(target=add_data, args=(head, i, i + 1000))
+        write_threads.append(t)
+        t.start()
 
-    # # Lấy dữ liệu từ hệ thống Chord và kiểm tra
-    # print(f'Key {21}:', head.get(21))
+    for t in write_threads:
+        t.join()
+
+    # # Lấy dữ liệu thread
+    # read_threads = []
+    # keys_to_read = [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+    # for i in range(0, len(keys_to_read), 2):
+    #     t = threading.Thread(target=read_data, args=(head, keys_to_read[i:i + 2]))
+    #     read_threads.append(t)
+    #     t.start()
+
+    # for t in read_threads:
+    #     t.join()
 
     # # Kiểm tra các khóa trong hệ thống Chord
     # keys = head.keys()
